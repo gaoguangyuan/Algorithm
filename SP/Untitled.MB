@@ -1,0 +1,28 @@
+Include "MAPBASIC.DEF"
+open window message
+Dim sAppPath as String
+Dim i,counter As Integer
+Dim oLine as Object
+Dim geo_length As Float
+Dim x1,y1,x2,y2 As Float
+sAppPath=ApplicationDirectory$()
+Open Table sAppPath+"五级道路.TAB" as tab0
+open file sAppPath+"1.txt" for output as #1
+i = 0
+Fetch First From tab0
+Do While Not EOT(tab0)
+oLine=ConvertToPline(tab0.obj)
+counter = ObjectInfo(oLine, OBJ_INFO_NPNTS)
+print "counter:"+counter
+geo_length = ObjectLen(oLine, "km")
+x1 = ObjectNodeX(oLine, 1, 1)
+x2 = ObjectNodeX(oLine, 1,counter)
+y1 = ObjectNodeY(oLine, 1, 1)
+y2 = ObjectNodeY(oLine, 1,counter)
+Print #1,geo_length+","+ x1+","+ y1+","+x2+","+ y2
+Print i
+i = i + 1
+Fetch Next From tab0 
+loop
+
+close all
